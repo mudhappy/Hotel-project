@@ -1,0 +1,2 @@
+class RoomsState < ApplicationRecord
+end
