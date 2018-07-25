@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Enterprise, type: :model do
-  let!(:user){ FactoryBot.create(:user) }
-  let(:enterprise){ FactoryBot.build(:enterprise, user_id: user.id) }
+  let!(:enterprise){ FactoryBot.create(:enterprise) }
+  let!(:users){ FactoryBot.create_list(:user, 10, enterprise_id: enterprise.id) }
 
   it 'is invalid with name' do
     enterprise.name = nil
@@ -17,7 +17,7 @@ RSpec.describe Enterprise, type: :model do
   it 'is valid if ruc have 11 digits' do
     enterprise.ruc = Faker::Number.number(10)
     expect(enterprise).to be_invalid
-    
+
     enterprise.ruc = Faker::Number.number(12)
     expect(enterprise).to be_invalid
 
@@ -25,8 +25,7 @@ RSpec.describe Enterprise, type: :model do
     expect(enterprise).to be_valid
   end
 
-  it 'is valid if have a owner user' do
-    enterprise.user_id = nil 
-    expect(enterprise).to be_invalid
+  it 'return all users' do
+    expect(enterprise.users.count).to eq(10)
   end
 end
