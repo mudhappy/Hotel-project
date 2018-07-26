@@ -2,5 +2,6 @@ json.call(
   user,
   :email,
   :role,
-  :enterprise
+  :enterprise,
+  :authentication_token
 )

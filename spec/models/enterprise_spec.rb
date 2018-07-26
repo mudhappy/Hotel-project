@@ -25,7 +25,7 @@ RSpec.describe Enterprise, type: :model do
     expect(enterprise).to be_valid
   end
 
-  it 'return all users' do
+  it 'should returns only his users' do
     expect(enterprise.users.count).to eq(10)
   end
 end

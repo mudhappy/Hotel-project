@@ -2,14 +2,14 @@ FactoryBot.define do
   factory :user do
     sequence(:email){ Faker::Internet.email }
     password '12345678'
-    association :enterprise
+    enterprise nil
 
     trait :invalid do
       email nil
     end
 
-    trait :without_enterprise do
-      enterprise_id nil
+    trait :with_enterprise do
+      association :enterprise
     end
 
     trait :root do
