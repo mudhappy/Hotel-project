@@ -39,13 +39,6 @@ class Api::V1::EnterprisesController < ApplicationController
     render json: { error: e.message }, status: :not_found
   end
 
-  def check_if_the_user_have_permissions
-    render(
-      json: { error: 'User does not have permissions' },
-      status: :unauthorized
-    ) if current_user.employee?
-  end
-
   def check_if_the_user_has_already_created_a_enterprise
     render(
       json: { error: "User can't create another enterprise" },

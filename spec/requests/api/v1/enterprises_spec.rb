@@ -97,8 +97,9 @@ RSpec.describe 'Api::V1::Enterprises', type: :request do
       end
 
       it 'returns the enterprise data updated' do
+        enterprise.reload
         data = JSON.parse(response.body)['data']
-        expect(data['name']).to eq(enterprise_params[:name])
+        expect(enterprise['name']).to eq(enterprise_params[:name])
       end
     end
 
