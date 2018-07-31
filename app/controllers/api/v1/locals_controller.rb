@@ -38,6 +38,8 @@ class Api::V1::LocalsController < ApplicationController
 
   def set_enterprise
     @enterprise ||= current_user.enterprise
+  rescue ActiveRecord::RecordNotFound => e
+    render json: { error: e.message }, status: :not_found
   end
 
   def set_local

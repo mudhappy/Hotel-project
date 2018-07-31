@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resource :enterprises do
         resources :locals
+        resources :rooms_types
       end
       resources :users, only: [:show, :create] 
       resources :sessions, only: [:create, :destroy]
