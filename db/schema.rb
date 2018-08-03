@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180730215422) do
+ActiveRecord::Schema.define(version: 20180802000546) do
 
   create_table "enterprises", force: :cascade do |t|
     t.string "name"
@@ -39,14 +39,16 @@ ActiveRecord::Schema.define(version: 20180730215422) do
 
   create_table "rooms", force: :cascade do |t|
     t.integer "rooms_type_id"
-    t.integer "rooms_states_id"
-    t.string "price"
+    t.integer "rooms_state_id"
+    t.decimal "price"
     t.string "dni"
     t.integer "roomer_quantities"
     t.datetime "left_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["rooms_states_id"], name: "index_rooms_on_rooms_states_id"
+    t.integer "enterprise_id"
+    t.index ["enterprise_id"], name: "index_rooms_on_enterprise_id"
+    t.index ["rooms_state_id"], name: "index_rooms_on_rooms_state_id"
     t.index ["rooms_type_id"], name: "index_rooms_on_rooms_type_id"
   end
 
@@ -54,6 +56,8 @@ ActiveRecord::Schema.define(version: 20180730215422) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "enterprise_id"
+    t.index ["enterprise_id"], name: "index_rooms_states_on_enterprise_id"
   end
 
   create_table "rooms_types", force: :cascade do |t|
