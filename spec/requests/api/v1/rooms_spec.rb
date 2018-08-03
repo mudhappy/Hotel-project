@@ -130,7 +130,7 @@ RSpec.describe 'Api::V1::Rooms', type: :request do
 
     it 'return room data' do
       data = JSON.parse(response.body)['data']
-      expect(data['price']).to eq(room[:price])
+      expect(data['price']).to eq(room[:price].to_s)
     end
   end
 end

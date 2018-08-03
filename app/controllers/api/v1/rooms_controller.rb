@@ -1,4 +1,5 @@
 class Api::V1::RoomsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_enterprise
   before_action :set_room, only: [:update, :show]
 

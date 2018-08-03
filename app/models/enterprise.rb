@@ -4,6 +4,7 @@ class Enterprise < ApplicationRecord
 
   has_many :users
   has_many :rooms
+  has_many :products
   has_many :locals
   has_many :rooms_types
   has_many :rooms_states

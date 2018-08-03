@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       resource :enterprises do
         resources :locals
         resources :rooms
+        resources :products
         resources :rooms_states
         resources :rooms_types
       end
