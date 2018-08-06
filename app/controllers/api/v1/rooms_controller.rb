@@ -1,7 +1,7 @@
 class Api::V1::RoomsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_enterprise
-  before_action :set_room, only: [:update, :show]
+  before_action :set_room, only: [:update, :show, :sale_product]
 
   def create
     @room = @enterprise.rooms.new(room_params)
@@ -29,6 +29,16 @@ class Api::V1::RoomsController < ApplicationController
     render :show, status: :ok
   end
 
+  def sale_product
+    @product = Product.find(params[:product_id])
+
+    if @room.add_product(@product)
+      render json: { data: @product }, status: :ok
+    else
+      render json: { error: @product.errors.messages }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def room_params
@@ -49,6 +59,7 @@ class Api::V1::RoomsController < ApplicationController
   end
 
   def set_room
+    params[:id] = params[:room_id] if params[:room_id]
     @room ||= @enterprise.rooms.find(params[:id])
   end
 

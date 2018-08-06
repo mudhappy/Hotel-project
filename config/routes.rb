@@ -5,7 +5,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       resource :enterprises do
         resources :locals
-        resources :rooms
+        resources :rooms do
+          match '/:product_id', to: 'rooms#sale_product', via: :post, as: 'sale_product'
+        end
         resources :products
         resources :rooms_states
         resources :rooms_types

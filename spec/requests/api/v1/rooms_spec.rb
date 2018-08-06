@@ -38,6 +38,7 @@ RSpec.describe 'Api::V1::Rooms', type: :request do
   )}
   let(:room) { rooms_list.first }
   let(:header) { { 'X-User-Email': user.email, 'X-User-Token': user.authentication_token } }
+  let!(:product){ FactoryBot.create(:product, enterprise_id: enterprise.id, quantity: 4) }
 
   describe 'POST /enterprises/rooms' do
     context 'when user is employee' do
@@ -131,6 +132,58 @@ RSpec.describe 'Api::V1::Rooms', type: :request do
     it 'return room data' do
       data = JSON.parse(response.body)['data']
       expect(data['price']).to eq(room[:price].to_s)
+    end
+  end
+
+  describe 'POST /enterprises/rooms/:room_id/sale_product' do
+    context 'if stock' do
+      before do
+        post(
+          api_v1_enterprises_room_sale_product_path(
+            room_id: room.id,
+            product_id: product.id
+          ),
+          headers: header
+        )
+      end
+
+      it 'returns ok status code' do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'add a product to room' do
+        expect(room.products.count).to eq(1)
+      end
+  
+      it 'less products cuantities' do
+        product.reload
+        expect(product[:quantity]).to eq(3)
+      end
+    end
+
+    context 'if not stock' do
+      let!(:product){ FactoryBot.create(:product, enterprise_id: enterprise.id, quantity: 0) }
+      before do
+        post(
+          api_v1_enterprises_room_sale_product_path(
+            room_id: room.id,
+            product_id: product.id
+          ),
+          headers: header
+        )
+      end
+
+      it 'returns unprocessable entity status code' do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it 'no add product' do
+        expect(room.products.count).to eq(0)
+      end
+  
+      it 'return error message' do
+        expect(response.body).to match(/error/)
+      end
     end
   end
 end

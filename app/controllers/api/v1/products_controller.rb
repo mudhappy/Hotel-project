@@ -2,10 +2,19 @@ class Api::V1::ProductsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_enterprise
   before_action :set_product, only: [:show, :update]
+  before_action :set_room, only: [:index]
 
   def index
-    @products = @enterprise.products
+    if params[:room_id]
+      @products = @room.products
+    else
+      @products = @enterprise.products
+    end
     render :index, status: :ok
+  end
+
+  def show
+    render :show, status: :ok
   end
 
   def create
@@ -33,6 +42,7 @@ class Api::V1::ProductsController < ApplicationController
   end
 
   def set_product
+    params[:id] = params[:product_id] if params[:product_id]
     @product = @enterprise.products.find(params[:id])
   rescue ActiveRecord::RecordNotFound => e
     render json: { error: e.message }, status: :not_found
@@ -40,5 +50,9 @@ class Api::V1::ProductsController < ApplicationController
 
   def set_enterprise
     @enterprise ||= current_user.enterprise
+  end
+
+  def set_room
+    @room ||= @enterprise.rooms.find(params[:room_id]) if params[:room_id]
   end
 end
